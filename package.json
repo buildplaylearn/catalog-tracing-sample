@@ -1,0 +1,26 @@
+{
+  "name": "catalog-tracing-sample",
+  "version": "1.0.0",
+  "description": "simple catalog api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/buildplaylearn/catalog-tracing-sample.git"
+  },
+  "author": "Ismaley",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/buildplaylearn/catalog-tracing-sample/issues"
+  },
+  "homepage": "https://github.com/buildplaylearn/catalog-tracing-sample#readme",
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.6.0"
+  }
+}
