@@ -1,7 +1,7 @@
 'use strict';
 
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 const ItemSchema = new Schema({
     name: {
@@ -22,22 +22,14 @@ const ItemSchema = new Schema({
         required: true,
         min: 1
     }
-});
+})
 
-ItemSchema.methods.increase = function(quantityToAdd) {
-    if(quantityToAdd < 1)
-        throw new Error('you must increase the item count by at least 1');
+ItemSchema.methods.increase = function increase(quantityToAdd) {
     this.quantity = this.quantity + quantityToAdd;
-    return this;
-};
+}
 
-ItemSchema.methods.decrease = function(quantityToRemove) {
-    if(quantityToRemove < 1)
-        throw new Error('you must decrease the item count by at least 1');
-    if(this.quantity < quantityToRemove)
-        throw new Error('Not enough items to decrease, current quantity:' + this.quantity);
-    this.quantity = this.quantity - quantityToRemove;
-    return this;
-};
+ItemSchema.methods.decrease = function decrease(quantityToRemove) {
+    this.quantity = this.quantity - quantityToRemove
+}
 
-module.exports = mongoose.model('Items', ItemSchema);
+module.exports = mongoose.model('Items', ItemSchema)

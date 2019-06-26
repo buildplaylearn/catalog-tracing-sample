@@ -13,8 +13,7 @@ mongoose.connect('mongodb://root:MongoDB2019!@localhost:27017/Catalogdb?authSour
 app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());
 
-const routes = require('./api/routes/ItemRoutes');
-routes(app);
+require('./api/routes/ItemRoutes')(app)
 
 app.listen(port);
 

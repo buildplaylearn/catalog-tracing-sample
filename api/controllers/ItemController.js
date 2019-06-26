@@ -1,64 +1,67 @@
 'use strict';
 
-const mongoose = require('mongoose'),
-    Item = mongoose.model('Items');
+// const ItemService = require('../service/ItemService')
 
-exports.list = function (req, res) {
-    Item.find({}, function (err, item) {
-        if(err)
-            res.send(err);
-        res.json(item)
-    });
-};
 
-exports.save = function(req, res) {
-    let item = new Item(req.body);
-    item.save(function(err, item) {
-        if (err)
-            res.send(err);
-        res.json(item);
-    });
-};
+class ItemController {
 
-exports.read = function (req, res) {
-    Item.findById(req.params.itemId, function (err, item) {
-        if(err)
-            res.send(err);
-        res.json(item);
-    });
-};
+    constructor(service) {
+        this.service = service
+    }
 
-exports.update = function (req, res) {
-    Item.findOneAndUpdate({_id: req.params.itemId}, req.body,
-        {new: true}, function (err, item) {
-            if(err)
-                res.send(err);
-            res.json(item);
-        });
-};
+    save(req, res) {
+        this.service.save(req.body)
+            .then(item => res.json(item, 200))
+            .catch(err => this.handleError(err, res))
+    }
 
-exports.delete = function (req, res) {
-    Item.deleteOne({_id: req.params.itemId}, function (err) {
-        if(err)
-            res.send(err);
-        res.json({ message: 'item successfully deleted'})
-    });
-};
+    update(req, res) {
+        this.service.update(req.params.itemId, req.body)
+            .then(item => res.json(item, 200))
+            .catch(err => this.handleError(err, res))
+    }
 
-exports.add = function (req, res) {
-    let item = Item.findById({_id: req.params.itemId});
-    item.schema.methods.increase(req.body.quantity, function (err, item) {
-        if(err)
-            res.send(err);
-        res.json(item);
-    });
-};
+    list(req, res) {
+        this.service.list()
+            .then(items => res.json(items, 200))
+            .catch(err => this.handleError(err, res))
+    }
 
-exports.take = function (req, res) {
-    let item = Item.findOne({_id: req.params.itemId});
-    item.decrease(req.body.quantity, function (err, item) {
-        if(err)
-            res.send(err);
-        res.json(item);
-    });
-};
+    read(req, res) {
+        this.service.findById(req.params.itemId)
+            .then(item => res.json(item, 200))
+            .catch(err => this.handleError(err, res))
+    }
+
+    delete(req, res) {
+        this.service.delete(req.params.itemId)
+            .then(() => res.status(204).send())
+            .catch(err => this.handleError(err, res))
+    }
+
+    add(req, res) {
+        this.service.increase(req.params.itemId, req.body.quantity)
+            .then(item => res.json(item, 200))
+            .catch(err => this.handleError(err, res))
+    }
+
+    take(req, res) {
+        this.service.decrease(req.params.itemId, req.body.quantity)
+            .then(item => res.json(item, 200))
+            .catch(err => this.handleError(err, res))
+    }
+
+    handleError(error, response) {
+        if(error instanceof NotFoundError) {
+            response.send(error, 404)
+        } else if(error instanceof BusinessError) {
+            response.send(error, 400)
+        } else {
+            response.send(error, 500)
+        }
+    }
+
+}
+
+module.exports = ItemController
+
