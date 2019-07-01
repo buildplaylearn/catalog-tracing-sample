@@ -1,3 +1,7 @@
+const middleware = require('express-opentracing').default
+
+const tracer = require('./tracing')('item-service')
+
 const express = require('express'),
     app = express(),
     port = process.env.PORT || 3000,
@@ -12,6 +16,8 @@ mongoose.connect('mongodb://root:MongoDB2019!@localhost:27017/Catalogdb?authSour
 
 app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());
+app.use(middleware(tracer))
+app.tracer = tracer.tracer
 
 require('./api/routes/ItemRoutes')(app)
 

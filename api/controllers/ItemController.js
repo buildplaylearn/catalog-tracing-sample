@@ -10,7 +10,7 @@ class ItemController {
     }
 
     save(req, res) {
-        this.service.save(req.body)
+        this.service.save(req.body, req.span)
             .then(item => res.json(item, 200))
             .catch(err => this.handleError(err, res))
     }

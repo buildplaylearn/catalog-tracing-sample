@@ -2,19 +2,26 @@
 
 const BusinessError = require('../error/BusinessError')
 const NotFoundError = require('../error/NotFoundError')
+const continueSpan = require('../utils/TracingUtil')
 
 class ItemService {
 
-    constructor(repository) {
+    constructor(repository, tracer) {
         this.repository = repository
+        this.tracer = tracer
     }
 
     async findById(id) {
         return await this.findItem(id)
     }
 
-    async save(params) {
-        return await this.repository.save(params)
+    async save(params, parent) {
+        return continueSpan(this.tracer, parent, 'ItemService::save', async span => {
+            const item = await this.repository.save(params)
+            span.log({item: 'saved item successfully, id: ' + item.id})
+            return item
+        })
+
     }
 
     async update(id, params) {

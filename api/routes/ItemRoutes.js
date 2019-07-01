@@ -6,7 +6,7 @@ const ItemRepository = require('../repository/ItemRepository')
 module.exports = function (app) {
 
     const repository = new ItemRepository()
-    const service = new ItemService(repository)
+    const service = new ItemService(repository, app.tracer)
     const controller = new ItemController(service)
 
     app.route('/items')
