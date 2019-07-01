@@ -1,6 +1,6 @@
 const middleware = require('express-opentracing').default
-
 const tracer = require('./tracing')('item-service')
+const hpropagate = require('hpropagate')()
 
 const express = require('express'),
     app = express(),
