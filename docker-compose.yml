@@ -1,5 +1,17 @@
 version: '3'
 services:
+  catalog-service:
+    image: catalog-tracing-sample
+    ports:
+      - "80:5000"
+    depends_on:
+      - mongo
+    environment:
+      -
+    networks:
+      - custom
+
+
   mongo:
     image: mongo
     restart: always
@@ -20,7 +32,6 @@ services:
       - "16686:16686"
     networks:
       - custom
-
 
 networks:
   custom:
